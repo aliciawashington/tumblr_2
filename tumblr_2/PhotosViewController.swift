@@ -16,6 +16,7 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
+        
         tableView.delegate = self
         tableView.dataSource = self
         super.viewDidLoad()
@@ -32,11 +33,35 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
                 let responseDictionary = dataDictionary["response"] as! [String: Any]
                 
                 self.posts = responseDictionary["posts"] as! [[String: Any]]
+                self.tableView.reloadData()
             }
         }
         task.resume()
-        self.tableView.reloadData()
 
+    }
+    
+    func fetchMovies(){
+        
+        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=f9240b3f5b8aeb07ae463caac20c17a9")!
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+        let task = session.dataTask(with: request) { (data, response, error) in
+            //This runs the network request
+            if let error = error {
+                print(error.localizedDescription)
+            }else if let data = data{
+                let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+                let movies = dataDictionary["results"] as! [[String: Any]]
+                self.posts = movies
+                self.tableView.reloadData()
+                //self.refreshControl.endRefreshing()
+                
+            }
+            
+        }
+        task.resume()
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,7 +75,7 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
         let post = posts[indexPath.row]
-        let photos = post["photos"] as! String
+        let photos = post["photos"] as! [[String: Any]]
             
         let photo = photos[0]
         let originalSize = photo["original_size"] as! [String: Any]
@@ -59,8 +84,9 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
             
     
         
-        cell.photoImageView.af_setImage(withURL: url!)
-       
+        cell.postimageview.af_setImage(withURL: url!)
+
+
         
         return cell
     }
