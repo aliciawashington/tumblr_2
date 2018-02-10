@@ -12,7 +12,7 @@ import AlamofireImage
 class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
     var posts: [[String: Any]] = []
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -37,7 +37,7 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
             }
         }
         task.resume()
-
+        
     }
     
     func fetchMovies(){
@@ -63,7 +63,7 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
         
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -76,27 +76,31 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
         let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
         let post = posts[indexPath.row]
         let photos = post["photos"] as! [[String: Any]]
-            
+        
         let photo = photos[0]
         let originalSize = photo["original_size"] as! [String: Any]
         let urlString = originalSize["url"] as! String
         let url = URL(string: urlString)
-            
-    
+        
+        
         
         cell.postimageview.af_setImage(withURL: url!)
-
-
+        
+        
         
         return cell
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let cell = sender as! UITableViewCell
         let detailViewController = segue.destination as! PhotoDetailViewController
-        detailViewController.posts = self.imageView.posts
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        let photo = posts[indexPath.row]
+        detailViewController.photo = photo
+        
+        
     }
     
-
-   
+    
+    
 }
