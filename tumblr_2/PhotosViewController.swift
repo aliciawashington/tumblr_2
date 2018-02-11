@@ -40,12 +40,13 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
         
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        
+        
         let cell = sender as! UITableViewCell
-        if let indexPath = tableView.indexPath(for: cell){
-            let pic = posts[indexPath.row]
-            let detailViewController = segue.destination as! PhotoDetailViewController
-            detailViewController.picture = [pic]
-        }
+        let detailViewController = segue.destination as! PhotoDetailViewController
+        detailViewController.photoURL = url!
+        
         
     }
     

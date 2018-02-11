@@ -15,13 +15,20 @@ class PhotoDetailViewController: UIViewController {
     
     @IBOutlet weak var detailimageView: UIImageView!
     
-    var picture: [[String: Any]] = []
+    var pic: [String: Any]!
+    var photoURL: URL!
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let url = URL(string: "https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV")
+        let photos = pic["photos"] as! [[String: Any]]
+        let photo = photos[0]
+        let originalSize = photo["original_size"] as! [String: Any]
+        let urlString = originalSize["url"] as! String
+        let url = URL(string: urlString)
+        
+        
         detailimageView.af_setImage(withURL: url!)
     }
     
