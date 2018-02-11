@@ -39,6 +39,17 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
         task.resume()
         
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cell = sender as! UITableViewCell
+        if let indexPath = tableView.indexPath(for: cell){
+            let pic = posts[indexPath.row]
+            let detailViewController = segue.destination as! PhotoDetailViewController
+            detailViewController.picture = [pic]
+        }
+        
+    }
+    
+    
     
     func fetchMovies(){
         
@@ -90,17 +101,4 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
         
         return cell
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let detailViewController = segue.destination as! PhotoDetailViewController
-        let cell = sender as! UITableViewCell
-        let indexPath = tableView.indexPath(for: cell)!
-        let photo = posts[indexPath.row]
-        detailViewController.photo = photo
-        
-        
-    }
-    
-    
-    
 }
