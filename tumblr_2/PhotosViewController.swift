@@ -44,8 +44,21 @@ class PhotosViewController: UIViewController,UITableViewDataSource,UITableViewDe
         
         
         let cell = sender as! UITableViewCell
-        let detailViewController = segue.destination as! PhotoDetailViewController
-        detailViewController.photoURL = url!
+        
+        if let indexPath = tableView.indexPath(for: cell){
+            let pic = posts[indexPath.row]
+            let photos = pic["photos"] as! [[String: Any]]
+            let photo = photos[0]
+            let originalSize = photo["original_size"] as! [String: Any]
+            let urlString = originalSize["url"] as! String
+            let url = URL(string: urlString)
+            
+            let detailViewController = segue.destination as! PhotoDetailViewController
+            detailViewController.photoURL = url!
+            
+
+        }
+        
         
         
     }

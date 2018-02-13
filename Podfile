@@ -6,7 +6,9 @@ target 'tumblr_2' do
   use_frameworks!
 
   # Pods for tumblr_2
-	pod 'AlamofireImage'
+	pod 'AlamofireImage', '~> 3.3'
+    
+  
 
   target 'tumblr_2Tests' do
     inherit! :search_paths
